@@ -1,0 +1,34 @@
+version: "2"
+
+services:
+  python:
+    build: .
+    ports:
+      - "5000:5000"
+  postgres:
+    restart: always
+    image: postgres:9.5
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=John
+      - POSTGRES_PASSWORD=deanspass
+      - POSTGRES_DB=example
+    volumes:
+      - /srv/docker/postgresql-data:/var/lib/postgresql/data
+
+
+version: '3'
+
+services:
+  db:
+    image: postgres
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
