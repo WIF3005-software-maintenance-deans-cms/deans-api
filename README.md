@@ -47,4 +47,5 @@ docker-compose run web python manage.py migrate
 ```
 
 # TODO
+
 [ ] persist data in a dockerized postgres database using volumes
