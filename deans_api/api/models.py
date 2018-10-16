@@ -12,7 +12,7 @@ class Operator(models.Model):
     
 class Crisis(models.Model):
 	Crisis_Id = models.AutoField(primary_key=True)
-	Crisis_Category = models.CharField(max_length=30)
+	Crisis_Category = models.ForeignKey('Category', related_name='posts', on_delete=models.CASCADE)
 	Crisis_Description = models.TextField()
 	Crisis_Assitance = models.CharField(max_length=30)
 	Crisis_Status = models.CharField(max_length=30)
@@ -20,3 +20,8 @@ class Crisis(models.Model):
 	Crisis_Location = models.TextField()
 	class Meta:
 		ordering =['-Crisis_Id']
+class Category(models.Model):
+
+class Status(models.Model):
+
+
