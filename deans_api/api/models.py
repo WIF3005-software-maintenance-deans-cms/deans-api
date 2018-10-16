@@ -9,15 +9,15 @@ class Operator(models.Model):
 	Is_Admin = models.BooleanField()
 	crisis = models.ManyToManyField('Crisis')
 	class Meta:
-		ordering =('-Operator_Id')
+		ordering =['-Operator_Id']
     
 class Crisis(models.Model):
 	Crisis_Id = models.IntegerField()
-	Crisis_Category = models.CharField()
+	Crisis_Category = models.CharField(max_length=30)
 	Crisis_Description = models.TextField()
-	Crisis_Assitance = models.CharField()
-	Crisis_Status = models.CharField()
+	Crisis_Assitance = models.CharField(max_length=30)
+	Crisis_Status = models.CharField(max_length=30)
 	Crisis_Time = models.DateTimeField(auto_now_add=True)
 	Crisis_Location = models.TextField()
 	class Meta:
-		ordering =('-Crisis_Id')
+		ordering =['-Crisis_Id']

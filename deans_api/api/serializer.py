@@ -1,4 +1,4 @@
-from deans_api.api.models import Crisis
+from api.models import Crisis
 from rest_framework import serializers
 
 class CrisisSerializer(serializers.HyperlinkedModelSerializer):
