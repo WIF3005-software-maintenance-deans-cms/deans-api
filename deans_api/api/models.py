@@ -1,6 +1,5 @@
 from django.db import models
 
-###
 
 class Operator(models.Model):
 	Operator_Id = models.IntegerField()
