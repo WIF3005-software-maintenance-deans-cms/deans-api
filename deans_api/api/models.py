@@ -20,8 +20,11 @@ class Crisis(models.Model):
 	Crisis_Location = models.TextField()
 	class Meta:
 		ordering =['-Crisis_Id']
-class Category(models.Model):
 
+class Category(models.Model):
+	class Meta:
+		pass
+	
 class Status(models.Model):
 
 
