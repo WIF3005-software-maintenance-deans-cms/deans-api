@@ -3,9 +3,9 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import viewsets, permissions, mixins
 from django.contrib.auth.models import User
-from deans_api.api.models import Crisis
-from deans_api.api.serializer import CrisisSerializer
-from deans_api.api.permissions import IsAuthorOrReadOnly
+from .models import Crisis
+from .serializer import CrisisSerializer
+from .permissions import IsAuthorOrReadOnly
 
 
 class CrisisViewSet(viewsets.ModelViewSet):
