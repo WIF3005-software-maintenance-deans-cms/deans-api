@@ -71,6 +71,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'deans_api.wsgi.application'
 
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
