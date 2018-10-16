@@ -2,29 +2,35 @@ from django.db import models
 
 
 class Operator(models.Model):
-	Operator_Id = models.IntegerField()
-	Operator_Password = models.CharField(max_length=20)
-	Operator_Name = models.CharField(max_length=30)
-	Is_Admin = models.BooleanField()
+	operator_id = models.IntegerField()
+	operator_password = models.CharField(max_length=20)
+	operator_name = models.CharField(max_length=30)
+	is_admin = models.BooleanField()
 	crisis = models.ManyToManyField('Crisis')
 	class Meta:
 		ordering =['-Operator_Id']
     
 class Crisis(models.Model):
-	Crisis_Id = models.AutoField(primary_key=True)
-	Crisis_Category = models.ForeignKey('Category', related_name='posts', on_delete=models.CASCADE)
-	Crisis_Description = models.TextField()
-	Crisis_Assitance = models.CharField(max_length=30)
-	Crisis_Status = models.CharField(max_length=30)
-	Crisis_Time = models.DateTimeField(auto_now_add=True)
-	Crisis_Location = models.TextField()
+	crisis_id = models.AutoField(primary_key=True)
+	crisis_type = models.ForeignKey('CrisisType',on_delete=models.CASCADE)
+	crisis_cescription = models.TextField()
+	crisis_assitance = models.CharField(max_length=30)
+	crisis_status = models.ForeignKey('Status',on_delete=models.CASCADE)
+	crisis_time = models.DateTimeField(auto_now_add=True)
+	crisis_location = models.TextField()
 	class Meta:
 		ordering =['-Crisis_Id']
 
-class Category(models.Model):
+class CrisisType (models.Model):
+	name=models.CharField(
+		choices=('Injury','Hazardous Air Condition','Fire Breakout','Gas Leaks','Crisis Not Listed'),
+		default=other)
 	class Meta:
 		pass
-	
 class Status(models.Model):
-
+	name=models.CharField(
+		choices=('Pending','Dispatched','Resolved',),
+		)
+	class Meta:
+		pass
 
