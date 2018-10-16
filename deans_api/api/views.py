@@ -7,6 +7,12 @@ from .models import Crisis
 from .serializer import CrisisSerializer
 from .permissions import IsAuthorOrReadOnly
 
+from rest_framework.permissions import (
+    AllowAny,
+    IsAuthenticated,
+    IsAdminUser,
+    IsAuthenticatedOrReadOnly,
+)
 
 class CrisisViewSet(viewsets.ModelViewSet):
     """

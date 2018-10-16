@@ -5,13 +5,13 @@ class CrisisSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Crisis
         fields = (
-        			'Crisis_Id',
-        			'Crisis_Category',
-        			'Crisis_Description',
-        			'Crisis_Assitance',
-        			'Crisis_Status',
-        			'Crisis_Time',
-        			'Crisis_Location'
+        			'crisis_id',
+        			'crisis_type',
+        			'crisis_description',
+        			'crisis_assitance',
+        			'crisis_status',
+        			'crisis_time',
+        			'crisis_location'
         		)
 
 
