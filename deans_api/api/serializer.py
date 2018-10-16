@@ -1,15 +1,16 @@
-from django.contrib.auth.models import User
-from restAPI.models import Post, Tag
+from deans_api.api.models import Crisis
+from rest_framework import serializers
 
-class PostSerializer(serializers.HyperlinkedModelSerializer):
+class CrisisSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Post
+        model = Crisis
         fields = ('url', 'id', 'title', 'pub_time', 'author', 'body', 'tags')
-class TagSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ('url', 'id', 'name', 'posts')
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ('url', 'id', 'username', 'posts')
+
+# class TagSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Tag
+#         fields = ('url', 'id', 'name', 'posts')
+# class UserSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ('url', 'id', 'username', 'posts')
