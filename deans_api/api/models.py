@@ -11,7 +11,7 @@ class Operator(models.Model):
 		ordering =['-Operator_Id']
     
 class Crisis(models.Model):
-	Crisis_Id = models.IntegerField()
+	Crisis_Id = models.AutoField(primary_key=True)
 	Crisis_Category = models.CharField(max_length=30)
 	Crisis_Description = models.TextField()
 	Crisis_Assitance = models.CharField(max_length=30)
