@@ -18,9 +18,9 @@ from django.urls import path
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
-from deans_api.api.models import Crisis
-from deans_api.api.serializer import CrisisSerializer
-from deans_api.api.views import CrisisViewSet
+from api.models import Crisis
+from api.serializer import CrisisSerializer
+from api.views import CrisisViewSet
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
