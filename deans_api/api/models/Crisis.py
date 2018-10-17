@@ -9,7 +9,7 @@ STATUS_CHOICES = (
 
 class Crisis(models.Model):
 	crisis_id = models.AutoField(primary_key=True)
-	crisis_type = models.ForeignKey('CrisisType',on_delete=models.CASCADE)
+	crisis_type = models.ForeignKey(CrisisType,on_delete=models.CASCADE)
 	crisis_description = models.TextField()
 	crisis_assistance = models.CharField(max_length=30)
 	crisis_time = models.DateTimeField(auto_now_add=True)

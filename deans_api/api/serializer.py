@@ -25,8 +25,7 @@ class CrisisUpdateSerializer(serializers.ModelSerializer):
     crisis_id = serializers.IntegerField(read_only=True)
     crisis_type = serializers.HyperlinkedRelatedField(
         view_name='CrisisType-detail',
-        lookup_field='name'
-                                                      )
+        lookup_field='name')
     crisis_description = serializers.CharField(required=False, allow_blank=True, max_length=255)
     crisis_assistance = serializers.CharField(max_length=30)
     crisis_time = serializers.DateTimeField(auto_now_add=True)
