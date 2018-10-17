@@ -1,10 +1,9 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework import viewsets, permissions, mixins
-from django.contrib.auth.models import User
+from rest_framework import viewsets, permissions, mixins, generics
 from .models import Crisis
-from .serializer import CrisisSerializer
+from .serializer import CrisisListSerializer, CrisisDeleteSerializer, CrisisUpdateSerializer
 from .permissions import IsAuthorOrReadOnly
 
 from rest_framework.permissions import (
@@ -14,13 +13,13 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
 )
 
-class CrisisViewSet(viewsets.ModelViewSet):
-    """
-    处理 /api/posts/ GET POST , 处理 /api/post/<pk>/ GET PUT PATCH DELETE
-    """
-    queryset = Crisis.objects.all()
-    serializer_class = CrisisSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly)
+# class CrisisViewSet(viewsets.ModelViewSet):
+#     """
+#     处理 /api/posts/ GET POST , 处理 /api/post/<pk>/ GET PUT PATCH DELETE
+#     """
+#     queryset = Crisis.objects.all()
+#     serializer_class = CrisisSerializer
+#     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly)
 
     # def perform_create(self, serializer):
     #     """
@@ -49,3 +48,29 @@ class CrisisViewSet(viewsets.ModelViewSet):
 #     """
 #     queryset = User.objects.all()
 #     serializer_class = UserSerializer
+class CrisisListAPIView(generics.ListAPIView):
+    queryset = Crisis.objects.all()
+    serializer_class = CrisisListSerializer
+    permission_classes = [AllowAny]
+
+# class CrisisCreateAPIView(generics.CreateAPIView):
+#     queryset = Crisis.objects.all()
+#     serializer_class = CrisisCreateSerializer
+#     permission_classes = [IsAuthenticated]
+#     throttle_scope = 'create_Crisis'
+
+# class CrisisDetailAPIView(generics.RetrieveAPIView):
+#     queryset = Crisis.objects.all()
+#     serializer_class = CrisisDetailSerializer
+#     permission_classes = [AllowAny]
+
+class CrisisDeleteAPIView(generics.DestroyAPIView):
+    queryset = Crisis.objects.all()
+    serializer_class = CrisisDeleteSerializer
+    permission_classes = [AllowAny]
+
+class CrisisUpdateAPIView(generics.UpdateAPIView):
+    # For now only admin can force update Crisis (change name, content, pin)
+    queryset = Crisis.objects.all()
+    serializer_class = CrisisUpdateSerializer
+    permission_classes = [IsAdminUser]
