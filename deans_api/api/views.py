@@ -74,6 +74,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing user instances.
     """
+    # TODO: fix the following borken permissions
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
