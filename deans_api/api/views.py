@@ -2,75 +2,61 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import viewsets, permissions, mixins, generics
+from django.contrib.auth.models import User
 from .models import Crisis
-from .serializer import CrisisListSerializer, CrisisDeleteSerializer, CrisisUpdateSerializer
+from .serializer import CrisisSerializer, UserSerializer
+# from .serializer import CrisisListSerializer, CrisisDeleteSerializer, UserSerializer#, CrisisUpdateSerializer
 from .permissions import IsAuthorOrReadOnly
 
 from rest_framework.permissions import (
-    AllowAny,
-    IsAuthenticated,
-    IsAdminUser,
-    IsAuthenticatedOrReadOnly,
+	AllowAny,
+	IsAuthenticated,
+	IsAdminUser,
+	IsAuthenticatedOrReadOnly,
 )
 
-# class CrisisViewSet(viewsets.ModelViewSet):
-#     """
-#     处理 /api/posts/ GET POST , 处理 /api/post/<pk>/ GET PUT PATCH DELETE
-#     """
-#     queryset = Crisis.objects.all()
-#     serializer_class = CrisisSerializer
-#     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly)
 
-    # def perform_create(self, serializer):
-    #     """
-    #     重写 perform_create
-    #     user 信息不在 request.data 中, 在保存时加入 user 信息
-    #     """
-    #
-    #     serializer.save(author=self.request.user)
+class CrisisViewSet(viewsets.ModelViewSet):
+	queryset = Crisis.objects.all()
+	serializer_class = CrisisSerializer
+
+	def get_permissions(self):
+		"""
+		Instantiates and returns the list of permissions that this view requires.
+		"""
+		if self.action == 'list':
+			permission_classes = [AllowAny]
+		elif self.action == 'retrieve':
+			permission_classes = [AllowAny]
+		elif self.action == 'create':	
+			permission_classes = [AllowAny]
+		else:
+			permission_classes = [IsAdminUser]
+		return [permission() for permission in permission_classes]
 
 
-# class TagViewSet(mixins.CreateModelMixin,
-#                  mixins.ListModelMixin,
-#                  mixins.RetrieveModelMixin,
-#                  viewsets.GenericViewSet):
-#     """
-#     处理 /api/tags/ GET POST, 处理 /api/tags/<pk>/ GET
-#     """
-#     queryset = Tag.objects.all()
-#     serializer_class = TagSerializer
-#     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-#
-#
-# class UserViewSet(viewsets.ReadOnlyModelViewSet):
-#     """
-#     处理 /api/users/ GET, 处理 /api/users/<pk>/ GET
-#     """
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-class CrisisListAPIView(generics.ListAPIView):
-    queryset = Crisis.objects.all()
-    serializer_class = CrisisListSerializer
-    permission_classes = [AllowAny]
+# class CrisisAssistanceViewSet(viewsets.ModelViewSet):
+# 	pass
 
-# class CrisisCreateAPIView(generics.CreateAPIView):
-#     queryset = Crisis.objects.all()
-#     serializer_class = CrisisCreateSerializer
-#     permission_classes = [IsAuthenticated]
-#     throttle_scope = 'create_Crisis'
+# class CrisisListAPIView(generics.ListAPIView):
+# 	queryset = Crisis.objects.all()
+# 	serializer_class = CrisisListSerializer
+# 	permission_classes = [IsAuthenticatedOrReadOnly]
 
-# class CrisisDetailAPIView(generics.RetrieveAPIView):
-#     queryset = Crisis.objects.all()
-#     serializer_class = CrisisDetailSerializer
-#     permission_classes = [AllowAny]
 
-class CrisisDeleteAPIView(generics.DestroyAPIView):
-    queryset = Crisis.objects.all()
-    serializer_class = CrisisDeleteSerializer
-    permission_classes = [AllowAny]
+# class CrisisDeleteAPIView(generics.DestroyAPIView):
+# 	queryset = Crisis.objects.all()
+# 	serializer_class = CrisisDeleteSerializer
+# 	permission_classes = [AllowAny]
 
-class CrisisUpdateAPIView(generics.UpdateAPIView):
-    # For now only admin can force update Crisis (change name, content, pin)
-    queryset = Crisis.objects.all()
-    serializer_class = CrisisUpdateSerializer
-    permission_classes = [IsAdminUser]
+# class CrisisUpdateAPIView(generics.UpdateAPIView):
+# 	# For now only admin can force update Crisis (change name, content, pin)
+# 	queryset = Crisis.objects.all()
+# 	serializer_class = CrisisUpdateSerializer
+# 	permission_classes = [IsAdminUser]
+
+
+class UserCreateView(generics.CreateAPIView):
+	model = User
+	permission_classes = [AllowAny]
+	serializer_class = UserSerializer

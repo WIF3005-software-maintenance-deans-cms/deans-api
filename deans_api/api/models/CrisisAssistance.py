@@ -1,7 +1,6 @@
 from django.db import models
     
-    
-class CrisisType (models.Model):
+class CrisisAssistance (models.Model):
 	name=models.CharField(
 			default=None,
 			max_length=255)
