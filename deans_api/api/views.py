@@ -70,8 +70,28 @@ class CrisisTypeViewSet(viewsets.ModelViewSet):
 			permission_classes = [IsAdminUser]
 		return [permission() for permission in permission_classes]
 
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    A viewset for viewing and editing user instances.
+    """
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
 
-class UserCreateView(generics.CreateAPIView):
-	model = User
-	permission_classes = [AllowAny]
-	serializer_class = UserSerializer
+    def get_permissions(self):
+		"""
+		Instantiates and returns the list of permissions that this view requires.
+		"""
+		if self.action == 'list':
+			permission_classes = [AllowAny]
+		elif self.action == 'retrieve':
+			permission_classes = [AllowAny]
+		elif self.action == 'create':
+			permission_classes = [IsAdminUser]
+		else:
+			permission_classes = [IsAdminUser]
+		return [permission() for permission in permission_classes]
+
+# class UserCreateView(generics.CreateAPIView):
+# 	model = User
+# 	permission_classes = [AllowAny]
+# 	serializer_class = UserSerializer
