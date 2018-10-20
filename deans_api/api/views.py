@@ -71,14 +71,14 @@ class CrisisTypeViewSet(viewsets.ModelViewSet):
 		return [permission() for permission in permission_classes]
 
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    A viewset for viewing and editing user instances.
-    """
-    # TODO: fix the following borken permissions
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
+	"""
+	A viewset for viewing and editing user instances.
+	"""
+	# TODO: fix the following borken permissions
+	serializer_class = UserSerializer
+	queryset = User.objects.all()
 
-    def get_permissions(self):
+	def get_permissions(self):
 		"""
 		Instantiates and returns the list of permissions that this view requires.
 		"""
