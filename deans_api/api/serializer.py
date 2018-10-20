@@ -20,11 +20,8 @@ class CrisisTypeSerializer(serializers.ModelSerializer):
 		fields = ('id','name',)
 
 class CrisisSerializer(serializers.ModelSerializer):
-	# crisis_type = CrisisTypeSerializer(read_only=True, many=True)
 	crisis_type = serializers.PrimaryKeyRelatedField(many=True, queryset=CrisisType.objects.all())
 	crisis_assistance = serializers.PrimaryKeyRelatedField(many=True, queryset=CrisisAssistance.objects.all())
-	# persons = serializers.PrimaryKeyRelatedField(
-	#        many=True, queryset=Person.objects.all())
 	class Meta:
 		model = Crisis
 		fields = (
