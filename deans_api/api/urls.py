@@ -5,12 +5,16 @@ from rest_framework import routers
 
 from .views import (
     CrisisViewSet,
+    CrisisAssistanceViewSet,
+    CrisisTypeViewSet,
     UserCreateView
 )
 
 router = routers.DefaultRouter()
 router.register(r'crises', CrisisViewSet)
-# router.register(r'CrisisAssistance',)
+router.register(r'crisisassistance', CrisisAssistanceViewSet)
+router.register(r'crisistype', CrisisTypeViewSet)
+
 
 urlpatterns = [
 	path('api-auth/', include('rest_framework.urls')),
