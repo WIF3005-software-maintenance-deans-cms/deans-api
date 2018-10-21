@@ -7,7 +7,7 @@ services:
       - "5432:5432"
   web:
     build: .
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: ["gunicorn", "--chdir", "deans_api", "--bind", ":8000", "deans_api.wsgi:application"]
     volumes:
       - .:/code
     ports:
