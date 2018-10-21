@@ -29,7 +29,7 @@ class CrisisViewSet(viewsets.ModelViewSet):
 		elif self.action == 'retrieve':
 			permission_classes = [AllowAny]
 		elif self.action == 'create':	
-			permission_classes = [AllowAny]
+			permission_classes = [IsAdminUser]
 		else:
 			permission_classes = [IsAdminUser]
 		return [permission() for permission in permission_classes]

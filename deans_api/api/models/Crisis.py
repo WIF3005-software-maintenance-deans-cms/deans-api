@@ -19,11 +19,13 @@ class Crisis(models.Model):
 	crisis_location = models.TextField()
 	updated_at = models.DateTimeField(auto_now_add=True)
 	owner = models.ManyToManyField(User)
+	visible = models.BooleanField(default=True) 
+	# TODO: support visible in backend
 
 	crisis_status = models.CharField(choices=STATUS_CHOICES, default='PD',  max_length=254)
 
-	def __utf8__(self):
-		return self.crisis_id
+	def __str__(self):
+		return str(self.crisis_id)
 
 	class Meta:
 		ordering =['-crisis_id']
