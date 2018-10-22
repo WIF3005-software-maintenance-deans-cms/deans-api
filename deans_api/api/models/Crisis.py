@@ -22,7 +22,7 @@ class Crisis(models.Model):
 	visible = models.BooleanField(default=True) 
 	# TODO: support visible in backend
 
-	cripsis_status = models.CharField(choices=STATUS_CHOICES, default='PD',  max_length=254)
+	crisis_status = models.CharField(choices=STATUS_CHOICES, default='PD',  max_length=254)
 
 	def __str__(self):
 		return str(self.crisis_id)
