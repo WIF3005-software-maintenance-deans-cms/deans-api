@@ -20,6 +20,11 @@ class CrisisViewSet(viewsets.ModelViewSet):
 	queryset = Crisis.objects.all()
 	serializer_class = CrisisSerializer
 
+	def partial_update(self, request, *args, **kwargs):
+		response_with_updated_instance = super(CrisisViewSet, self).partial_update(request, *args, **kwargs)
+		Crisis.objects.my_func(request.user, self.get_object())
+		return response_with_updated_instance
+
 	def get_permissions(self):
 		"""
 		Instantiates and returns the list of permissions that this view requires.
@@ -28,8 +33,6 @@ class CrisisViewSet(viewsets.ModelViewSet):
 			permission_classes = [AllowAny]
 		elif self.action == 'retrieve':
 			permission_classes = [AllowAny]
-		elif self.action == 'create':	
-			permission_classes = [IsAdminUser]
 		else:
 			permission_classes = [IsAdminUser]
 		return [permission() for permission in permission_classes]
