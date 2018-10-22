@@ -15,7 +15,6 @@ from rest_framework.permissions import (
 	IsAuthenticatedOrReadOnly,
 )
 
-
 class CrisisViewSet(viewsets.ModelViewSet):
 	queryset = Crisis.objects.all()
 	serializer_class = CrisisSerializer
@@ -33,8 +32,9 @@ class CrisisViewSet(viewsets.ModelViewSet):
 			permission_classes = [AllowAny]
 		elif self.action == 'retrieve':
 			permission_classes = [AllowAny]
-		else:
-			permission_classes = [IsAdminUser]
+		elif self.action == 'create':	
+			permission_classes = [AllowAny]
+
 		return [permission() for permission in permission_classes]
 
 class CrisisAssistanceViewSet(viewsets.ModelViewSet):
