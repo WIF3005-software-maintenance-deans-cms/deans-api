@@ -237,3 +237,5 @@ bundles/
 vendor/pkg/
 pyenv
 Vagrantfile
+
+migrations/
