@@ -34,6 +34,8 @@ class CrisisViewSet(viewsets.ModelViewSet):
 			permission_classes = [AllowAny]
 		elif self.action == 'create':	
 			permission_classes = [AllowAny]
+		else:
+			permission_classes = [IsAdminUser]
 
 		return [permission() for permission in permission_classes]
 
