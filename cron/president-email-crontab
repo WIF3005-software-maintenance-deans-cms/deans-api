@@ -1,0 +1,2 @@
+*/5 * * * * root source /home/ubuntu/.bashrc && source /home/ubuntu/work/your-project/bin/activate && python /home/ubuntu/work/your-project/src/manage.py runcrons > /home/ubuntu/cronjob.log | tee /var/log/cron.log
+ 
