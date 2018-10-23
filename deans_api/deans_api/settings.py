@@ -23,8 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '%9mbpu5w!1c$-5xz9v@n03x$0=jzc5wrjlujh1wu*p&sb09iu$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-# DEBUG = False
+if('PRODUCTION' in os.environ and os.environ['PRODUCTION']=='1'):
+    DEBUG = False
+else:
+    DEBUG = True
 
 
 ALLOWED_HOSTS = ['*']
@@ -78,16 +80,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'deans_api.wsgi.application'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    )
-}
-
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-import os
 if('IN_DOCKER' in os.environ and os.environ['IN_DOCKER']=='1'):
     DATABASES = {
     'default': {
@@ -132,6 +126,12 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]
 }
+if('PRODUCTION' in os.environ and os.environ['PRODUCTION']=='1'):
+    REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+         'rest_framework.renderers.JSONRenderer',
+     )
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
