@@ -2,10 +2,9 @@ from django.db import models
     
     
 class CrisisType (models.Model):
-	name=models.ListCharField(base_field=CharField(max_length=20),
-			size=20,
+	name=models.CharField(
 			default=None,
-			max_length=(20*20))
+			max_length=255)
 	
 	def __str__(self):
 		return self.name
