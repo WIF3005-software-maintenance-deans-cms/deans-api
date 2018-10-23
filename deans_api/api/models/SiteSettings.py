@@ -23,7 +23,7 @@ class SingletonModel(models.Model):
 class SiteSettings(SingletonModel):
     setting_type = models.ForeignKey('CrisisType',default = None)
     setting_assistance = models.ForeignKey('CrisisAssistance',default = None)
-    social_media_account = models.ForeignKey('SocialMediaAccount' default = None)
-    emergency_agencies = models.ForeignKey('EmergencyAgencies' default = None)
+    social_media_account = models.ForeignKey('SocialMediaAccount', default = None)
+    emergency_agencies = models.ForeignKey('EmergencyAgencies', default = None)
     summary_reporting_email = models.EmailField(default='prime-minister@gmail.com')
     
