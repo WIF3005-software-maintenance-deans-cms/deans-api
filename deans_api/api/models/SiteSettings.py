@@ -1,5 +1,8 @@
 from django.db import models
-
+from .CrisisType import CrisisType
+from .CrisisAssistance import CrisisAssistance
+from .EmergencyAgencies import EmergencyAgencies
+from .SocialMediaAccount import SocialMediaAccount
 class SingletonModel(models.Model):
 
     class Meta:
@@ -18,9 +21,9 @@ class SingletonModel(models.Model):
         return obj
 
 class SiteSettings(SingletonModel):
-    support = models.EmailField(default='support@example.com')
-    sales_department = models.EmailField(blank=True)
-    twilio_account_sid = models.CharField(max_length=255, default='ACbcad883c9c3e9d9913a715557dddff99')
-    twilio_auth_token = models.CharField(max_length=255, default='abd4d45dd57dd79b86dd51df2e2a6cd5')
-    twilio_phone_number = models.CharField(max_length=255, default='+15006660005')
-
+    setting_type = models.ForeignKey('CrisisType',default = None, on_delete=models.CASCADE)
+    setting_assistance = models.ForeignKey('CrisisAssistance',default = None, on_delete=models.CASCADE)
+    social_media_account = models.ForeignKey('SocialMediaAccount', default = None, on_delete=models.CASCADE)
+    emergency_agencies = models.ForeignKey('EmergencyAgencies', default = None, on_delete=models.CASCADE)
+    summary_reporting_email = models.EmailField(default='prime-minister@gmail.com')
+    
