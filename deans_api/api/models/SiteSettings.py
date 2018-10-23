@@ -21,9 +21,8 @@ class SingletonModel(models.Model):
         return obj
 
 class SiteSettings(SingletonModel):
-    setting_type = models.ForeignKey('CrisisType',default = None, on_delete=models.CASCADE)
-    setting_assistance = models.ForeignKey('CrisisAssistance',default = None, on_delete=models.CASCADE)
+    # setting_type = models.ForeignKey('CrisisType',default = None, on_delete=models.CASCADE)
+    # setting_assistance = models.ForeignKey('CrisisAssistance',default = None, on_delete=models.CASCADE)
     social_media_account = models.ForeignKey('SocialMediaAccount', default = None, on_delete=models.CASCADE)
     emergency_agencies = models.ForeignKey('EmergencyAgencies', default = None, on_delete=models.CASCADE)
     summary_reporting_email = models.EmailField(default='prime-minister@gmail.com')
-    
