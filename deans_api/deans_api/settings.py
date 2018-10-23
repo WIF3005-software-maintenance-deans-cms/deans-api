@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'django_cron',
-    'api'
+    'api',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 CRON_CLASSES = [
@@ -132,6 +134,11 @@ if('PRODUCTION' in os.environ and os.environ['PRODUCTION']=='1'):
          'rest_framework.renderers.JSONRenderer',
      )
     }
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    "*"
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/

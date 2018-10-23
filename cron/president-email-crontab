@@ -1,2 +1,2 @@
-*/2 * * * * root python3 /code/deans_api/manage.py runcrons  | tee /var/log/cron.log
+*/1 * * * *  python3 /code/deans_api/manage.py runcrons  | tee /var/log/cron.log
 # Mandatory blank line
