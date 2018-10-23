@@ -1,7 +1,7 @@
 from django_cron import CronJobBase, Schedule
 
 import logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("django")
 
 import time
 
@@ -13,7 +13,5 @@ class CronEmail(CronJobBase):
     code = 'api.CronEmail'    # a unique code
 
     def do(self):
-        print('Sent email to President Office.')
-        print(__name__)
         logger.info('Sent email to President Office.')
         time.sleep(10)

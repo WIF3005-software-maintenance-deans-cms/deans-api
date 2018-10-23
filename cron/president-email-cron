@@ -1,3 +1,2 @@
-* * * * * root python3 /code/deans_api/manage.py runcrons  > /var/log/cron.log
-* * * * * root echo "Hello world" >> /var/log/cron.log 2>&1
+* * * * * root python3 /code/deans_api/manage.py runcrons  >> /var/log/cron.log
 # Mandatory blank line
