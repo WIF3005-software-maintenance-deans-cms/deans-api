@@ -49,3 +49,6 @@ docker-compose run web python manage.py migrate
 # TODO
 
 - [ ] persist data in a dockerized postgres database using volumes
+- [ ] django-restful doc
+- [ ] remove 'ADD' on setting page
+- [ ] 

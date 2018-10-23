@@ -7,9 +7,11 @@ ADD requirements.txt /code/
 COPY debs/* ./
 RUN pip install -r requirements.txt && \
 	dpkg -i *.deb
+RUN apt-get -y install cron
 COPY cron/* /etc/cron.d/
 RUN chmod 0644 /etc/cron.d/*
-RUN service cron start
+RUN touch /var/log/cron.log
+# RUN service cron start
 
 ADD ./deans_api /code/
 
