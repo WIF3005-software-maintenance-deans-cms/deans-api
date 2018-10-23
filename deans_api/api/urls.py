@@ -13,10 +13,10 @@ from .views import (
 )
 
 router = routers.DefaultRouter()
-router.register(r'^crises$', CrisisViewSet)
-router.register(r'^crisisassistance$', CrisisAssistanceViewSet)
-router.register(r'^crisistype$', CrisisTypeViewSet)
-router.register(r'^users$', UserViewSet)
+router.register(r'^crises', CrisisViewSet)
+router.register(r'^crisisassistance', CrisisAssistanceViewSet)
+router.register(r'^crisistype', CrisisTypeViewSet)
+router.register(r'^users', UserViewSet)
 
 
 urlpatterns = [
