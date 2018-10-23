@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Operator, Crisis, CrisisType, CrisisAssistance
-
+from .models import Operator, Crisis, CrisisType, CrisisAssistance, SiteSettings
 
 admin.site.register(Operator)
 
@@ -11,3 +10,4 @@ admin.site.register(Crisis, CrisisAdmin)
 
 admin.site.register(CrisisType)
 admin.site.register(CrisisAssistance)
+admin.site.register(SiteSettings)
