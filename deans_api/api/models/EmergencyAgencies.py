@@ -4,7 +4,7 @@ class EmergencyAgencies(models.Model):
 	agency = models.CharField(default=None, max_length=255)
 	phone_number = models.CharField(default=None, max_length=255)
 	def __str__(self):
-		return self.phone_number
+		return self.agency
 
 	class Meta:
 		pass
