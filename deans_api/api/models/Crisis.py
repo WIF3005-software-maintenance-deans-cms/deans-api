@@ -6,7 +6,7 @@ from .CrisisAssistance import CrisisAssistance
 
 STATUS_CHOICES = (
 	('PD', 'Pending'),
-	('DP', 'Dispached'),
+	('DP', 'Dispatched'),
 	('RS', 'Resolved'),
 )
 
