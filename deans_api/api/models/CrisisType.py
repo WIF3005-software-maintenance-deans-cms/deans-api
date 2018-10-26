@@ -1,4 +1,4 @@
-from django.db import models CharField
+from django.db import models, CharField
 from django_mysql.models import ListCharField
     
 class CrisisType (models.Model):
