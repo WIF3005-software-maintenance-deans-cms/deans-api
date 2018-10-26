@@ -23,7 +23,11 @@ class SingletonModel(models.Model):
 class SiteSettings(SingletonModel):
     #setting_type = models.ForeignKey('CrisisType',default = None, on_delete=models.CASCADE)
     #setting_assistance = models.ForeignKey('CrisisAssistance',default = None, on_delete=models.CASCADE)
-    social_media_account = models.CharField(default=None, max_length=255)
-    social_media = models.CharField(default=None, max_length=255)
+    # social_media_account = models.CharField(default=None, max_length=255)
+    # social_media = models.CharField(default=None, max_length=255)
     #emergency_agencies = models.ForeignKey('EmergencyAgencies', default = None, on_delete=models.CASCADE)
+    facebook_account = models.CharField(default=None, max_length=255)
+    facebook_password = models.CharField(default=None, max_length=255)
+    twitter_account = models.CharField(default=None, max_length=255)
+    twitter_password = models.CharField(default=None, max_length=255)
     summary_reporting_email = models.EmailField(default='prime-minister@gmail.com')
