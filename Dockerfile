@@ -9,19 +9,17 @@ ENV ENTRY_DIR $DJANGO_ROOT
 ENV PATH "$DJANGO_ROOT:$BASEDIR:$PATH"
 # RUN mkdir /code/deans-api
 
-
+WORKDIR $BASEDIR
 ADD requirements.txt $BASEDIR/
 ADD debs/ $BASEDIR/
-ADD ./deans_api $DJANGO_ROOT/
-ADD ./data $DATA_DIR
 COPY ./start_django.sh $BASEDIR/
-
-WORKDIR $BASEDIR
+RUN chmod +x start_django.sh
 RUN pip install -r requirements.txt && \
 	dpkg -i *.deb
-RUN chmod +x start_django.sh
 
-
+WORKDIR $BASEDIR
+ADD ./deans_api $DJANGO_ROOT/
+ADD ./data $DATA_DIR
 
 WORKDIR $ENTRY_DIR
 # CMD  ["python3","$DJANGO_ROOT/manage.py", "runserver", "0.0.0.0:8000"]

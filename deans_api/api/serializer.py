@@ -26,13 +26,17 @@ class CrisisSerializer(serializers.ModelSerializer):
         model = Crisis
         fields = (
                     'crisis_id',
+                    'your_name',
+                    'mobile_number',
                     'crisis_type',
                     'crisis_description',
                     'crisis_assistance',
                     'crisis_status',
                     'crisis_time',
-                    'crisis_location'
+                    'crisis_location1',
+                    'crisis_location2'
                 )
+
 
 class CrisisUpdateSerializer(serializers.ModelSerializer):
     # content = serializers.CharField(required=True)
@@ -49,10 +53,13 @@ class CrisisUpdateSerializer(serializers.ModelSerializer):
         model = Crisis
         fields = (
             'crisis_type',
+            'your_name',
+            'mobile_number',
             'crisis_description',
             'crisis_assistance',
             'crisis_status',
-            'crisis_location'
+            'crisis_location1',
+            'crisis_location2'
         )
 
     def update(self, instance, validated_data):
