@@ -1,7 +1,7 @@
-from django.db import models, CharField
+from django.db.models import Model, CharField
 from django_mysql.models import ListCharField
     
-class CrisisType (models.Model):
+class CrisisType (Model):
 	name=ListCharField(
 			base_field=CharField(max_length=30),
 			default=None,
