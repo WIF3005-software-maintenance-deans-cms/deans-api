@@ -21,6 +21,7 @@ router.register(r'^users', UserViewSet)
 
 urlpatterns = [
 	path('api-auth/', include('rest_framework.urls')),
+    path('rest-auth/', include('rest_auth.urls')),
     url(r'^', include(router.urls)),
     # url(r'^crises/update/<int:pk>/edit/$', CrisisUpdateAPIView.as_view(), name='crisis-update')
     url(r'^crises/update/(?P<pk>\d+)/$', CrisisUpdateView.as_view(), name='crisis_update'),
