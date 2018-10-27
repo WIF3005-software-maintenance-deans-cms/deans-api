@@ -5,7 +5,7 @@ from rest_framework import viewsets, permissions, mixins, generics
 from django.contrib.auth.models import User
 from .models import Crisis, CrisisAssistance, CrisisType
 from .serializer import CrisisSerializer, UserSerializer, CrisisAssistanceSerializer, CrisisTypeSerializer, CrisisUpdateSerializer, CrisisBasicSerializer
-from .permissions import IsAuthorOrReadOnly
+from .permissions import NotAllowed
 
 from rest_framework.permissions import (
     AllowAny,
@@ -106,14 +106,10 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
-        if self.action == 'list':
-            permission_classes = [AllowAny]
-        elif self.action == 'retrieve':
-            permission_classes = [AllowAny]
-        elif self.action == 'create':
+        if self.action == 'create':
             permission_classes = [IsAdminUser]
         else:
-            permission_classes = [IsAdminUser]
+            permission_classes = [NotAllowed]
         return [permission() for permission in permission_classes]
 
 # class UserCreateView(generics.CreateAPIView):

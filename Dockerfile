@@ -10,12 +10,15 @@ ENV PATH "$DJANGO_ROOT:$BASEDIR:$PATH"
 # RUN mkdir /code/deans-api
 
 WORKDIR $BASEDIR
-ADD requirements.txt $BASEDIR/
+
 ADD debs/ $BASEDIR/
+RUN dpkg -i *.deb
+
 COPY ./start_django.sh $BASEDIR/
 RUN chmod +x start_django.sh
-RUN pip install -r requirements.txt && \
-	dpkg -i *.deb
+
+ADD requirements.txt $BASEDIR/
+RUN pip install -r requirements.txt
 
 WORKDIR $BASEDIR
 ADD ./deans_api $DJANGO_ROOT/

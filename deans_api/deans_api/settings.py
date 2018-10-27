@@ -58,7 +58,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-# 'corsheaders.middleware.CorsMiddleware',
 
 CRON_CLASSES = [
     "api.cron.CronEmail",
@@ -132,6 +131,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ),
+}
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'api.serializer.UserSerializer',
 }
 if('PRODUCTION' in os.environ and os.environ['PRODUCTION']=='1'):
     REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] =  (

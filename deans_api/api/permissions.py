@@ -11,3 +11,11 @@ class IsAuthorOrReadOnly(permissions.BasePermission):
             return True
         # Only author can write permission
         return obj.author == request.user
+
+class NotAllowed(permissions.BasePermission):
+    """
+    Not allow anyony to access
+    """
+    message = 'No access'
+    def has_permission(self, request, view):
+        return False

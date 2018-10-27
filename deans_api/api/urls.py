@@ -27,3 +27,6 @@ urlpatterns = [
     url(r'^crises/update/(?P<pk>\d+)/$', CrisisUpdateView.as_view(), name='crisis_update'),
     url(r'^crises/update-partial/(?P<pk>\d+)/$', CrisisPartialUpdateView.as_view(), name='crisis_partial_update'),
 ]
+# Registration with rest auth:
+# url(r'^rest-auth/', include('rest_auth.urls')),
+# url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
