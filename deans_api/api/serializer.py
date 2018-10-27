@@ -36,7 +36,22 @@ class CrisisSerializer(serializers.ModelSerializer):
                     'crisis_location1',
                     'crisis_location2'
                 )
-
+                
+class CrisisBasicSerializer(serializers.ModelSerializer):
+    crisis_type = serializers.PrimaryKeyRelatedField(many=True, queryset=CrisisType.objects.all())
+    crisis_assistance = serializers.PrimaryKeyRelatedField(many=True, queryset=CrisisAssistance.objects.all())
+    class Meta:
+        model = Crisis
+        fields = (
+                    'crisis_id',
+                    'crisis_type',
+                    'crisis_description',
+                    'crisis_assistance',
+                    'crisis_status',
+                    'crisis_time',
+                    'crisis_location1',
+                    'crisis_location2'
+                )
 
 class CrisisUpdateSerializer(serializers.ModelSerializer):
     # content = serializers.CharField(required=True)

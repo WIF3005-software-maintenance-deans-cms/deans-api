@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions, mixins, generics
 from django.contrib.auth.models import User
 from .models import Crisis, CrisisAssistance, CrisisType
-from .serializer import CrisisSerializer, UserSerializer, CrisisAssistanceSerializer, CrisisTypeSerializer, CrisisUpdateSerializer
+from .serializer import CrisisSerializer, UserSerializer, CrisisAssistanceSerializer, CrisisTypeSerializer, CrisisUpdateSerializer, CrisisBasicSerializer
 from .permissions import IsAuthorOrReadOnly
 
 from rest_framework.permissions import (
@@ -16,7 +16,11 @@ from rest_framework.permissions import (
 
 class CrisisViewSet(viewsets.ModelViewSet):
     queryset = Crisis.objects.all()
-    serializer_class = CrisisSerializer
+
+    def get_serializer_class(self):
+        if self.request.user.is_staff:
+            return CrisisSerializer
+        return CrisisBasicSerializer
 
     def get_permissions(self):
         """
