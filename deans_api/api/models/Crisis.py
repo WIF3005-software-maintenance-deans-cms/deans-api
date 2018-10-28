@@ -17,6 +17,7 @@ class Crisis(models.Model):
 	crisis_type = models.ManyToManyField(CrisisType)
 	crisis_description = models.TextField()
 	crisis_assistance = models.ManyToManyField(CrisisAssistance)
+	crisis_assistance_description = models.TextField()
 	crisis_time = models.DateTimeField(auto_now_add=True)
 	crisis_location1 = models.TextField()
 	crisis_location2 = models.TextField()

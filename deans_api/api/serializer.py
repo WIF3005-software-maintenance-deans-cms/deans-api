@@ -31,6 +31,7 @@ class CrisisSerializer(serializers.ModelSerializer):
                     'crisis_type',
                     'crisis_description',
                     'crisis_assistance',
+                    'crisis_assistance_description',
                     'crisis_status',
                     'crisis_time',
                     'crisis_location1',
@@ -47,6 +48,7 @@ class CrisisBasicSerializer(serializers.ModelSerializer):
                     'crisis_type',
                     'crisis_description',
                     'crisis_assistance',
+                    'crisis_assistance_description',
                     'crisis_status',
                     'crisis_time',
                     'crisis_location1',
@@ -72,6 +74,7 @@ class CrisisUpdateSerializer(serializers.ModelSerializer):
             'mobile_number',
             'crisis_description',
             'crisis_assistance',
+            'crisis_assistance_description',
             'crisis_status',
             'crisis_location1',
             'crisis_location2'
