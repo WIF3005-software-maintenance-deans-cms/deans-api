@@ -88,11 +88,6 @@ class CrisisUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-class AdminUserCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username')
-
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -108,3 +103,15 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'password', 'is_staff')
+
+class UserAdminSerializer(UserSerializer):
+    def update(self, instance, validated_data):
+        if "is_staff" in validated_data:
+            instance.is_staff = validated_data['is_staff']
+        if "password" in validated_data:
+            instance.set_password(validated_data['password'])
+        instance.save()
+        return instance
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'password', 'is_staff')
