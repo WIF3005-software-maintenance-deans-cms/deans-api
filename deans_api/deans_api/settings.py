@@ -50,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -141,6 +142,11 @@ if('PRODUCTION' in os.environ and os.environ['PRODUCTION']=='1'):
          'rest_framework.renderers.JSONRenderer',
      )
 
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = (
+    "localhost:3000",
+    "127.0.0.1:3000"
+)
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
