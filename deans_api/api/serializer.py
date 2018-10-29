@@ -45,6 +45,8 @@ class CrisisBasicSerializer(serializers.ModelSerializer):
         model = Crisis
         fields = (
                     'crisis_id',
+                    'your_name',
+                    'mobile_number',
                     'crisis_type',
                     'crisis_description',
                     'crisis_assistance',
