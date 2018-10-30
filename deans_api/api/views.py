@@ -183,7 +183,7 @@ class SiteSettingViewSet(viewsets.ModelViewSet):
         return [permission() for permission in permission_classes]
 
 
-class EmergencyAgencies(viewsets.ModelViewSet):
+class EmergencyAgenciesView(viewsets.ModelViewSet):
 
     serializer_class = EmergencyAgenciesSerializer
     queryset = EmergencyAgencies.objects.all()
