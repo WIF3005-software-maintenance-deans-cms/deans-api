@@ -22,15 +22,17 @@ class CronEmail(CronJobBase):
         created_time = datetime.datetime.now() - datetime.timedelta(minutes=30)
 
         latest_crisis = Crisis.objects.filter(crisis_time__gte=created_time)
-
+        logger.info("Reporting" + str(len(latest_crisis))+ "crisis.")
         payload['email'] = SiteSettings.load().summary_reporting_email
         payload['cases'] = [ 
             {
-                "time":i.crisis_time, 
+                "crisis_time":i.crisis_time, 
+                "resolved_by": i.updated_at if i.crisis_status == "RS" else "None",
                 "location": i.crisis_location1 + "\n" + i.crisis_location2,
-                "type": [j.name for j in i.crisis_type.all()],
+                "type": ", ".join([j.name for j in i.crisis_type.all()]),
                 "status": i.crisis_status,
-                "resolved_in": i.updated_at if i.crisis_status == "RS" else "None"
+                "crisis_description": i.crisis_description,
+                "crisis_assistance": ", ".join([j.name for j in i.crisis_assistance.all()]),
             } for i in latest_crisis
             ]
         return latest_crisis
@@ -45,9 +47,7 @@ class CronEmail(CronJobBase):
         }
 
         response = requests.request("POST", url, json=payload, headers=headers)
-
         print(response.text)
-
         logger.info(response.text)
-
         logger.info('Sent email to President Office.')
+
