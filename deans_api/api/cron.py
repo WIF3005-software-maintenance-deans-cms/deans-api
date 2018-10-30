@@ -6,48 +6,50 @@ import requests
 import logging
 logger = logging.getLogger("django")
 
+def construct_report_data():
+    payload = {}
+    print(payload)
+    created_time = datetime.datetime.now() - datetime.timedelta(minutes=30)
+    latest_crisis = Crisis.objects.filter(crisis_time__gte=created_time)
+    logger.info("Reporting" + str(len(latest_crisis))+ "crisis.")
+    payload['email'] = SiteSettings.load().summary_reporting_email
+    payload['cases'] = [ 
+        {
+            "crisis_time":i.crisis_time.strftime("%Y-%m-%d %H:%M:%S"), 
+            "resolved_by": i.updated_at.strftime("%Y-%m-%d %H:%M:%S") if i.crisis_status == "RS" else "None",
+            "location": i.crisis_location1 + "\n" + i.crisis_location2,
+            "type": ", ".join([j.name for j in i.crisis_type.all()]),
+            "status": i.crisis_status,
+            "crisis_description": i.crisis_description,
+            "crisis_assistance": ", ".join([j.name for j in i.crisis_assistance.all()]),
+        } for i in latest_crisis
+        ]
+    print(123)
+    print(payload)
+    return payload
 
 class CronEmail(CronJobBase):
     RUN_EVERY_MINS = 1
     ALLOW_PARALLEL_RUNS = True
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
-    code = 'api.CronEmail'    # a unique code
-
-    @classmethod
-    def construct_report_data(self):
-        payload = {}
-        {"email": "xinyesg@gmail.com", "cases": [
-            {"time": "now", "location": "JP", "type": "fire", "status": "Dispatched", "resolved_in": 9.9}]}
-        
-        created_time = datetime.datetime.now() - datetime.timedelta(minutes=30)
-
-        latest_crisis = Crisis.objects.filter(crisis_time__gte=created_time)
-        logger.info("Reporting" + str(len(latest_crisis))+ "crisis.")
-        payload['email'] = SiteSettings.load().summary_reporting_email
-        payload['cases'] = [ 
-            {
-                "crisis_time":i.crisis_time, 
-                "resolved_by": i.updated_at if i.crisis_status == "RS" else "None",
-                "location": i.crisis_location1 + "\n" + i.crisis_location2,
-                "type": ", ".join([j.name for j in i.crisis_type.all()]),
-                "status": i.crisis_status,
-                "crisis_description": i.crisis_description,
-                "crisis_assistance": ", ".join([j.name for j in i.crisis_assistance.all()]),
-            } for i in latest_crisis
-            ]
-        return latest_crisis
-
+    code = 'api.CronEmail'
     def do(self):
         url = "http://notification:8000/reports/"
-        payload = CronEmail.construct_report_data()
-        headers = {
-            'Content-Type': "application/json",
-            'cache-control': "no-cache",
-            'Postman-Token': "39233191-7871-4784-b54d-d4f89e03032e"
-        }
-
+        payload = construct_report_data()
+        headers = {'Content-Type': "application/json"}
         response = requests.request("POST", url, json=payload, headers=headers)
-        print(response.text)
-        logger.info(response.text)
+        # logger.info(response.text)
         logger.info('Sent email to President Office.')
 
+class CronSocialMedia(CronJobBase):
+    RUN_EVERY_MINS = 1
+    ALLOW_PARALLEL_RUNS = True
+    schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
+    code = 'api.CronSocialMedia'
+    def do(self):
+        url = "http://notification:8000/reports/"
+        payload = construct_report_data()
+        headers = {'Content-Type': "application/json"}
+        response = requests.request("POST", url, json=payload, headers=headers)
+        # logger.info(response.text)
+        logger.info('Sent email to President Office.')
