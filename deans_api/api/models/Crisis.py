@@ -32,5 +32,6 @@ class Crisis(models.Model):
 		return str(self.crisis_id)
 
 	class Meta:
-		ordering =['-crisis_id']
+		ordering = ['-crisis_id']
+
 

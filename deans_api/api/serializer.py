@@ -1,7 +1,9 @@
 from .models import (
     Crisis,
     CrisisAssistance,
-    CrisisType
+    CrisisType,
+    SiteSettings,
+    EmergencyAgencies
     )
 from rest_framework import serializers
 from django.utils.timezone import now
@@ -120,3 +122,22 @@ class UserAdminSerializer(UserSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'password', 'is_staff')
+
+class SiteSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteSettings
+        fields = (
+            'facebook_account',
+            'facebook_password',
+            'twitter_account',
+            'twitter_password',
+            'summary_reporting_email',
+        )
+
+class EmergencyAgenciesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmergencyAgencies
+        fields = (
+            'agency',
+            'phone_number'
+        )
