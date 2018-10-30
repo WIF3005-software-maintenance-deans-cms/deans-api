@@ -15,7 +15,6 @@ class CrisisAdmin(admin.ModelAdmin):
     list_display = ('crisis_id', 'crisis_description','crisis_time','visible')
     list_editable = ('visible',)
 admin.site.register(Crisis, CrisisAdmin)
-
 admin.site.register(CrisisType)
 admin.site.register(CrisisAssistance)
 admin.site.register(SiteSettings)
