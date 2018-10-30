@@ -1,5 +1,5 @@
 from django_cron import CronJobBase, Schedule
-
+from models import Crisis
 import logging
 logger = logging.getLogger("django")
 
