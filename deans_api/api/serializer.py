@@ -31,12 +31,31 @@ class CrisisSerializer(serializers.ModelSerializer):
                     'crisis_type',
                     'crisis_description',
                     'crisis_assistance',
+                    'crisis_assistance_description',
                     'crisis_status',
                     'crisis_time',
                     'crisis_location1',
                     'crisis_location2'
                 )
-
+                
+class CrisisBasicSerializer(serializers.ModelSerializer):
+    crisis_type = serializers.PrimaryKeyRelatedField(many=True, queryset=CrisisType.objects.all())
+    crisis_assistance = serializers.PrimaryKeyRelatedField(many=True, queryset=CrisisAssistance.objects.all())
+    class Meta:
+        model = Crisis
+        fields = (
+                    'crisis_id',
+                    'your_name',
+                    'mobile_number',
+                    'crisis_type',
+                    'crisis_description',
+                    'crisis_assistance',
+                    'crisis_assistance_description',
+                    'crisis_status',
+                    'crisis_time',
+                    'crisis_location1',
+                    'crisis_location2'
+                )
 
 class CrisisUpdateSerializer(serializers.ModelSerializer):
     # content = serializers.CharField(required=True)
@@ -57,6 +76,7 @@ class CrisisUpdateSerializer(serializers.ModelSerializer):
             'mobile_number',
             'crisis_description',
             'crisis_assistance',
+            'crisis_assistance_description',
             'crisis_status',
             'crisis_location1',
             'crisis_location2'
@@ -73,11 +93,6 @@ class CrisisUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-class AdminUserCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username')
-
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -90,6 +105,18 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
         return user
 
+    class Meta:
+        model = User
+        fields = ('username', 'password', 'is_staff')
+
+class UserAdminSerializer(UserSerializer):
+    def update(self, instance, validated_data):
+        if "is_staff" in validated_data:
+            instance.is_staff = validated_data['is_staff']
+        if "password" in validated_data:
+            instance.set_password(validated_data['password'])
+        instance.save()
+        return instance
     class Meta:
         model = User
         fields = ('id', 'username', 'password', 'is_staff')

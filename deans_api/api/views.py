@@ -3,9 +3,17 @@ from django.shortcuts import render
 # Create your views here.
 from rest_framework import viewsets, permissions, mixins, generics
 from django.contrib.auth.models import User
+from .permissions import NotAllowed
 from .models import Crisis, CrisisAssistance, CrisisType
-from .serializer import CrisisSerializer, UserSerializer, CrisisAssistanceSerializer, CrisisTypeSerializer, CrisisUpdateSerializer
-from .permissions import IsAuthorOrReadOnly
+from .serializer import (
+                CrisisSerializer, 
+                CrisisAssistanceSerializer, 
+                CrisisTypeSerializer, 
+                CrisisUpdateSerializer, 
+                CrisisBasicSerializer, 
+                UserSerializer, 
+                UserAdminSerializer
+            )
 
 from rest_framework.permissions import (
     AllowAny,
@@ -16,7 +24,11 @@ from rest_framework.permissions import (
 
 class CrisisViewSet(viewsets.ModelViewSet):
     queryset = Crisis.objects.all()
-    serializer_class = CrisisSerializer
+
+    def get_serializer_class(self):
+        if self.request.user.is_staff:
+            return CrisisSerializer
+        return CrisisBasicSerializer
 
     def get_permissions(self):
         """
@@ -94,25 +106,33 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing user instances.
     """
-    # TODO: fix the following borken permissions
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+    def get_serializer_class(self):
+        if self.request.user.is_staff:
+            return UserAdminSerializer
+        return UserSerializer
 
     def get_permissions(self):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
         if self.action == 'list':
-            permission_classes = [AllowAny]
-        elif self.action == 'retrieve':
-            permission_classes = [AllowAny]
+            permission_classes = [IsAdminUser] 
         elif self.action == 'create':
             permission_classes = [IsAdminUser]
         else:
-            permission_classes = [IsAdminUser]
+            permission_classes = [NotAllowed]
         return [permission() for permission in permission_classes]
 
-# class UserCreateView(generics.CreateAPIView):
-# 	model = User
-# 	permission_classes = [AllowAny]
-# 	serializer_class = UserSerializer
+class UserPartialUpdateView(generics.GenericAPIView, mixins.UpdateModelMixin):
+    '''
+    You just need to provide the field which is to be modified.
+    '''
+    queryset = User.objects.all()
+    serializer_class = UserAdminSerializer
+    permission_classes = (IsAdminUser,)
+
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)

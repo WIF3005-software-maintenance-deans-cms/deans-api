@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    "django_extensions",
     'rest_auth',
     'django_cron',
     'api',
@@ -122,20 +123,25 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+        'rest_framework.permissions.AllowAny'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+}
+
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'api.serializer.UserSerializer',
 }
 if('PRODUCTION' in os.environ and os.environ['PRODUCTION']=='1'):
-    REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES'] =  (
          'rest_framework.renderers.JSONRenderer',
      )
-    }
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
