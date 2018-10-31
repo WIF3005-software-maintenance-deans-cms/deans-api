@@ -6,9 +6,21 @@ import requests
 import logging
 logger = logging.getLogger("django")
 
+# email: {
+#     "receiver": "aaa@gmail.com",
+#     "content": "
+#     <head> </head>
+#     "
+# }
+# social_media
+# {
+#     "mesa": "
+    
+#     "
+# }
+
 def construct_report_data():
     payload = {}
-    print(payload)
     created_time = datetime.datetime.now() - datetime.timedelta(minutes=30)
     latest_crisis = Crisis.objects.filter(crisis_time__gte=created_time)
     logger.info("Reporting" + str(len(latest_crisis))+ "crisis.")
@@ -24,7 +36,6 @@ def construct_report_data():
             "crisis_assistance": ", ".join([j.name for j in i.crisis_assistance.all()]),
         } for i in latest_crisis
         ]
-    print(123)
     print(payload)
     return payload
 
@@ -47,9 +58,9 @@ class CronSocialMedia(CronJobBase):
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
     code = 'api.CronSocialMedia'
     def do(self):
-        url = "http://notification:8000/reports/"
+        url = "http://notification:8000/socialmessages/"
         payload = construct_report_data()
         headers = {'Content-Type': "application/json"}
         response = requests.request("POST", url, json=payload, headers=headers)
         # logger.info(response.text)
-        logger.info('Sent email to President Office.')
+        logger.info('Sent message to social medias.')

@@ -63,6 +63,7 @@ MIDDLEWARE = [
 
 CRON_CLASSES = [
     "api.cron.CronEmail",
+    "api.cron.CronSocialMedia"
 ]
 
 ROOT_URLCONF = 'deans_api.urls'

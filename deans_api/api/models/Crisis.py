@@ -40,14 +40,17 @@ class Crisis(models.Model):
 
 def dispatch_trigger(sender, instance, created, **kwargs):
 
-    if sender.dispatch_trigger:
-        requests.post("http://notification:8000/dispatchnotices/",
-                      json={"number" : "+6586963013", "message" : "go go go, Fire"},
-                      headers={
-                        'content-type': "application/json",
-                        'cache-control': "no-cache"
-                      }
-                      )
+    try:
+        if sender.dispatch_trigger:
+            requests.post("http://notification:8000/dispatchnotices/",
+                          json={"number" : "+6586963013", "message" : "go go go, Fire"},
+                          headers={
+                            'content-type': "application/json",
+                            'cache-control': "no-cache"
+                          }
+                          )
+    except Exception:
+        print("It is ok.")
 
 signals.post_save.connect(receiver=dispatch_trigger, sender=Crisis)
 
