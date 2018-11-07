@@ -2,6 +2,8 @@ from django_cron import CronJobBase, Schedule
 from .models import Crisis, SiteSettings
 import datetime
 import requests
+from django.template.loader import get_template
+from django.template import Context
 
 import logging
 logger = logging.getLogger("django")
@@ -19,8 +21,16 @@ logger = logging.getLogger("django")
 #     "
 # }
 
+email_template = get_template('president_email.html')
+
+
 def construct_report_data():
     payload = {}
+
+    d = Context({ 'username': username })
+    html_content = htmly.render(d)
+
+    
     created_time = datetime.datetime.now() - datetime.timedelta(minutes=30)
     latest_crisis = Crisis.objects.filter(crisis_time__gte=created_time)
     logger.info("Reporting" + str(len(latest_crisis))+ "crisis.")
