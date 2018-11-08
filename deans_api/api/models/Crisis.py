@@ -5,6 +5,10 @@ from .Operator import Operator
 from .CrisisAssistance import CrisisAssistance
 from django.db.models import signals
 import requests
+import channels.layers
+from asgiref.sync import async_to_sync
+from rest_framework.response import Response # this is bad!
+import json
 
 STATUS_CHOICES = (
     ('PD', 'Pending'),
@@ -38,7 +42,7 @@ class Crisis(models.Model):
     class Meta:
         ordering = ['-crisis_id']
 
-def dispatch_trigger(sender, instance, created, **kwargs):
+def trigger(sender, instance, created, **kwargs):
 
     try:
         if sender.dispatch_trigger:
@@ -49,8 +53,22 @@ def dispatch_trigger(sender, instance, created, **kwargs):
                             'cache-control': "no-cache"
                           }
                           )
-    except Exception:
-        print("It is ok.")
+    except Exception as e:
+        print("It is ok.", e)
 
-signals.post_save.connect(receiver=dispatch_trigger, sender=Crisis)
+    try:
+        # send to redis
+        queryset = Crisis.objects.all()
+        from ..serializer import CrisisSerializer # this is bad !
+        serializer = CrisisSerializer(queryset, many=True)
+        response = Response(serializer.data) # response is an array of crises
+        channel_layer = channels.layers.get_channel_layer()
+        async_to_sync(channel_layer.group_send)("crises", {
+            "type": "crises_update",
+            "payload": json.dumps(list(response.data))
+        })
+    except Exception as e:
+        print("It is not ok. Human lives at risk!", e)
+
+signals.post_save.connect(receiver=trigger, sender=Crisis)
 
