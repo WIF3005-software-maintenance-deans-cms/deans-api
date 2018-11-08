@@ -24,6 +24,9 @@ from rest_framework.permissions import (
     IsAuthenticatedOrReadOnly,
 )
 
+# import channels.layers
+# from asgiref.sync import async_to_sync
+
 class CrisisViewSet(viewsets.ModelViewSet):
     queryset = Crisis.objects.all()
 

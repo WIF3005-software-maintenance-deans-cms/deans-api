@@ -1,5 +1,6 @@
 # from .models import Crisis
 from channels.generic.websocket import JsonWebsocketConsumer, WebsocketConsumer
+from asgiref.sync import async_to_sync
 import json
 from .models import Crisis
 from .serializer import CrisisSerializer
@@ -11,25 +12,33 @@ class CrisesConsumer(WebsocketConsumer):
         """
         Perform things on connection start
         """
+        # Join group
+        async_to_sync(self.channel_layer.group_add)(
+            "crises",
+            self.channel_name
+        )
+        
         self.accept()
 
     def receive(self, text_data):
         """
         Called when a message is received
         """
-        # text_data_json = json.loads(text_data)
-        # message = text_data_json['message']
-
-        # self.send(text_data=json.dumps({
-        #     'message': message
-        # }))
-        queryset = Crisis.objects.all()
-        serializer = CrisisSerializer(queryset, many=True)
-        response = Response(serializer.data) # response is an array of crises
-        self.send(json.dumps(list(response.data)));
+        pass
     
     def disconnect(self, message, **kwargs):
         """
         Perform things on connection close
         """
-        pass
+        # Leave group
+        async_to_sync(self.channel_layer.group_discard)(
+            "crises",
+            self.channel_name
+        )
+
+    def crises_update(self, event):
+        """
+        Called when a message is received from redis
+        """
+        payload = event["payload"]
+        self.send(payload)
