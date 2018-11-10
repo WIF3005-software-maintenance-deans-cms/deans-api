@@ -30,7 +30,7 @@ class Crisis(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     owner = models.ManyToManyField(User)
     visible = models.BooleanField(default=True)
-
+    phone_number_to_notify = models.CharField(default="",max_length=255)
     dispatch_trigger = models.BooleanField(default=False)
     # TODO: support visible in backend
 
@@ -43,16 +43,22 @@ class Crisis(models.Model):
         ordering = ['-crisis_id']
 
 def trigger(sender, instance, created, **kwargs):
-
     try:
         if sender.dispatch_trigger:
-            requests.post("http://notification:8000/dispatchnotices/",
-                          json={"number" : "+6586963013", "message" : "go go go, Fire"},
-                          headers={
-                            'content-type': "application/json",
-                            'cache-control': "no-cache"
-                          }
-                          )
+            this_crisis = Crisis.objects.get()
+            phone_number_to_notify = json.loads(this_crisis.phone_number_to_notify)
+
+            # TODO: create message
+
+            for phone_number in phone_number_to_notify:
+                prefixed_phone_number = "+65" + str(phone_number)
+                requests.post("http://notification:8000/dispatchnotices/",
+                            json={"number" : prefixed_phone_number, "message" : "go go go, Fire"},
+                            headers={
+                                'content-type': "application/json",
+                                'cache-control': "no-cache"
+                            }
+                            )
     except Exception as e:
         print("It is ok.", e)
 

@@ -37,7 +37,8 @@ class CrisisSerializer(serializers.ModelSerializer):
                     'crisis_status',
                     'crisis_time',
                     'crisis_location1',
-                    'crisis_location2'
+                    'crisis_location2',
+                    'phone_number_to_notify'
                 )
                 
 class CrisisBasicSerializer(serializers.ModelSerializer):
