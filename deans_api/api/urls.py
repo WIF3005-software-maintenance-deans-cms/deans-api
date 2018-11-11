@@ -12,6 +12,7 @@ from .views import (
     UserViewSet,
     UserPartialUpdateView,
     EmergencyAgenciesView,
+    EmergencyAgenciesPartialUpdateView,
     SiteSettingViewSet
 )
 
@@ -32,6 +33,7 @@ urlpatterns = [
     url(r'^crises/update/(?P<pk>\d+)/$', CrisisUpdateView.as_view(), name='crisis_update'),
     url(r'^crises/update-partial/(?P<pk>\d+)/$', CrisisPartialUpdateView.as_view(), name='crisis_partial_update'),
     url(r'^users/update-partial/(?P<pk>\d+)/$', UserPartialUpdateView.as_view(), name='user_partial_update'),
+    url(r'^emergencyagencies/update-partial/(?P<pk>\d+)/$', EmergencyAgenciesPartialUpdateView.as_view(), name='emergencyagency_partial_update'),
 ]
 # Registration with rest auth:
 # url(r'^rest-auth/', include('rest_auth.urls')),

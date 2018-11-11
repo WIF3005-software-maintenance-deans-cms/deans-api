@@ -44,7 +44,7 @@ class Crisis(models.Model):
 
 def trigger(sender, instance, created, **kwargs):
     this_crisis = Crisis.objects.get()
-    crisis_status = this_crisis.crisis_status;
+    crisis_status = this_crisis.crisis_status
     if crisis_status == "DP":
         try:
             if sender.dispatch_trigger:
