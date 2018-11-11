@@ -142,3 +142,23 @@ class EmergencyAgenciesSerializer(serializers.ModelSerializer):
             'agency',
             'phone_number'
         )
+
+class EmergencyAgenciesUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmergencyAgencies
+        fields = (
+            'agency_id',
+            'agency',
+            'phone_number'
+        )
+
+    # def update(self, instance, validated_data):
+    #     # Update fields if there is any change
+    #     for field, value in validated_data.items():
+    #         setattr(instance, field, value)
+    #     # Update 'updated_at' field to now
+    #     setattr(instance, 'updated_at', now())
+    #
+    #     # Note: If user update post, it won't change the last_activity
+    #     instance.save()
+    #     return instance

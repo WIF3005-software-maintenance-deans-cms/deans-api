@@ -19,7 +19,7 @@ RUN chmod +x start_django.sh
 
 ADD requirements.txt $BASEDIR/
 RUN pip install -r requirements.txt
-
+RUN sed -i -e 's/\r$//' start_django.sh
 WORKDIR $BASEDIR
 ADD ./deans_api $DJANGO_ROOT/
 ADD ./data $DATA_DIR

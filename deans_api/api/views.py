@@ -14,7 +14,8 @@ from .serializer import (
                 UserSerializer, 
                 UserAdminSerializer,
                 SiteSettingsSerializer,
-                EmergencyAgenciesSerializer
+                EmergencyAgenciesSerializer,
+                EmergencyAgenciesUpdateSerializer
             )
 
 from rest_framework.permissions import (
@@ -142,30 +143,6 @@ class UserPartialUpdateView(generics.GenericAPIView, mixins.UpdateModelMixin):
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    A viewset for viewing and editing user instances.
-    """
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-
-    def get_serializer_class(self):
-        if self.request.user.is_staff:
-            return UserAdminSerializer
-        return UserSerializer
-
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action == 'list':
-            permission_classes = [IsAdminUser]
-        elif self.action == 'create':
-            permission_classes = [IsAdminUser]
-        else:
-            permission_classes = [NotAllowed]
-        return [permission() for permission in permission_classes]
-
 class SiteSettingViewSet(viewsets.ModelViewSet):
 
     serializer_class = SiteSettingsSerializer
@@ -204,3 +181,11 @@ class EmergencyAgenciesView(viewsets.ModelViewSet):
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
+
+class EmergencyAgenciesPartialUpdateView(generics.GenericAPIView, mixins.UpdateModelMixin):
+
+    serializer_class = EmergencyAgenciesUpdateSerializer
+    queryset = EmergencyAgencies.objects.all()
+
+    def put(self, request, *args, **kwargs):
+        return self.partial_update(request, *args, **kwargs)
