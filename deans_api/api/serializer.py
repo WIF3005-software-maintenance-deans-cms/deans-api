@@ -139,6 +139,7 @@ class EmergencyAgenciesSerializer(serializers.ModelSerializer):
     class Meta:
         model = EmergencyAgencies
         fields = (
+            'agency_id',
             'agency',
             'phone_number'
         )

@@ -8,19 +8,6 @@ from django.template import Context
 import logging
 logger = logging.getLogger("django")
 
-# email: {
-#     "receiver": "aaa@gmail.com",
-#     "content": "
-#     <head> </head>
-#     "
-# }
-# social_media
-# {
-#     "mesa": "
-    
-#     "
-# }
-
 email_template = get_template('president_email.html')
 
 
@@ -29,15 +16,10 @@ def construct_report_data():
     # d = Context({ 'username': username })
     # html_content = htmly.render(d)
 
-    print("1")
     created_time = datetime.datetime.now() - datetime.timedelta(minutes=30) # crisis created since 30 mins ago
-    print("5")
     new_crisis = Crisis.objects.filter(crisis_time__gte=created_time)
-    print("4")
     recent_resolved_crisis = Crisis.objects.filter(updated_at__gte=created_time, crisis_status="RS")
-    print("3")
     active_crisis = Crisis.objects.exclude(crisis_status="RS")
-    print('2')
 
 
     # logger.info("Reporting" + str(len(latest_crisis))+ "crisis.")
@@ -45,7 +27,6 @@ def construct_report_data():
     payload['new_crisis'] = []
     payload['recent_resolved_crisis'] = []
     payload['active_crisis'] = []
-    print("payload", payload)
     for i in new_crisis:
         payload['new_crisis'].append(
             {

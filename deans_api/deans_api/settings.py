@@ -106,7 +106,7 @@ if('IN_DOCKER' in os.environ and os.environ['IN_DOCKER']=='1'):
         'USER': 'postgres',
         'HOST': 'db',
         'PORT': 5432,
-    }
+    },
 }
 else:
     DATABASES = {

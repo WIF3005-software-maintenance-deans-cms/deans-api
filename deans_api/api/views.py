@@ -189,3 +189,8 @@ class EmergencyAgenciesPartialUpdateView(generics.GenericAPIView, mixins.UpdateM
 
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
+
+    def delete(self, request, pk, format=None):
+        event = self.get_object(pk)
+        event.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

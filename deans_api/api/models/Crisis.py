@@ -72,7 +72,7 @@ def trigger(sender, instance, created, **kwargs):
                 crisis_description = this_crisis.crisis_description
                 assistance_description = this_crisis.crisis_assistance_description
                 # construct message content
-                message = "We have received the following crisis report, need your immediate action:\n\n"
+                message = "We have received the following crisis report, need your immediate attention:\n\n"
                 message += "Reported Time: " + reported_time + "\n"
                 message += "Reporter Name: " + name + "\n"
                 message += "Mobile Number: " + mobile_number + "\n"

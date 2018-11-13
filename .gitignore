@@ -239,3 +239,6 @@ pyenv
 Vagrantfile
 
 migrations/
+deans_api/.pytest_cache
+deans_api/api/.pytest_cache
+*.pytest_cache
