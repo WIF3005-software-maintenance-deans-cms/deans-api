@@ -5,10 +5,13 @@ from .Operator import Operator
 from .CrisisAssistance import CrisisAssistance
 from django.db.models import signals
 import requests
+import datetime
 import channels.layers
 from asgiref.sync import async_to_sync
 from rest_framework.response import Response # this is bad!
 import json
+import logging
+logger = logging.getLogger("django")
 
 STATUS_CHOICES = (
     ('PD', 'Pending'),
@@ -42,13 +45,95 @@ class Crisis(models.Model):
     class Meta:
         ordering = ['-crisis_id']
 
+def construct_social_media_data(this_crisis):
+    payload = {}
+
+    # shelter location url, immediate Crisis, recent_resolved_crisis, Dispatched Crisis,
+
+    created_time = datetime.datetime.now() - datetime.timedelta(minutes=30)  # crisis created since 30 mins ago
+    recent_resolved_crisis = Crisis.objects.filter(updated_at__gte=created_time, crisis_status="RS")
+    active_crisis = Crisis.objects.exclude(crisis_status="RS")
+
+    payload['postTime'] = created_time.strftime('%Y-%m-%d %H:%M')
+    payload['deansURL'] = "https://deans.csming.com/"
+    payload['shelterURL'] = "https://deans.csming.com/"
+    payload['recent_resolved_crisis'] = []
+    payload['active_crisis'] = []
+    payload['new_crisis'] = []
+    print("payload", payload)
+
+    payload['new_crisis'].append({
+        "crisis_time": this_crisis.crisis_time.strftime("%Y-%m-%d %H:%M:%S"),
+        "resolved_by": this_crisis.updated_at.strftime("%Y-%m-%d %H:%M:%S") if this_crisis.crisis_status == "RS" else "None",
+        "location": this_crisis.crisis_location1,
+        "location2": this_crisis.crisis_location2,
+        "type": ", ".join([j.name for j in this_crisis.crisis_type.all()]),
+        "status": this_crisis.crisis_status,
+        "crisis_description": this_crisis.crisis_description,
+        "crisis_assistance": ", ".join([j.name for j in this_crisis.crisis_assistance.all()]),
+        "assistance_description": this_crisis.crisis_assistance_description
+    }
+    )
+
+    for i in recent_resolved_crisis:
+        payload['recent_resolved_crisis'].append(
+            {
+                "crisis_time": i.crisis_time.strftime("%Y-%m-%d %H:%M:%S"),
+                "resolved_by": i.updated_at.strftime("%Y-%m-%d %H:%M:%S") if i.crisis_status == "RS" else "None",
+                "location": i.crisis_location1,
+                "location2": i.crisis_location2,
+                "type": ", ".join([j.name for j in i.crisis_type.all()]),
+                "status": i.crisis_status,
+                "crisis_description": i.crisis_description,
+                "crisis_assistance": ", ".join([j.name for j in i.crisis_assistance.all()]),
+                "assistance_description": i.crisis_assistance_description
+            }
+        )
+    for i in active_crisis:
+        payload['active_crisis'].append(
+            {
+                "crisis_time": i.crisis_time.strftime("%Y-%m-%d %H:%M:%S"),
+                "resolved_by": i.updated_at.strftime("%Y-%m-%d %H:%M:%S") if i.crisis_status == "RS" else "None",
+                "location": i.crisis_location1,
+                "location2": i.crisis_location2,
+                "type": ", ".join([j.name for j in i.crisis_type.all()]),
+                "status": i.crisis_status,
+                "crisis_description": i.crisis_description,
+                "crisis_assistance": ", ".join([j.name for j in i.crisis_assistance.all()]),
+                "assistance_description": i.crisis_assistance_description
+            }
+        )
+    return payload
+
+
 def trigger(sender, instance, created, **kwargs):
-    this_crisis = Crisis.objects.get()
-    crisis_status = this_crisis.crisis_status
-    if crisis_status == "DP":
+
+    #Social media Trigger
+    print("Doing Social Media Publishing...")
+    url = "http://notification:8000/socialmessages/"
+    this_crisis = Crisis.objects.get(pk=instance.pk)
+    fb_payload = construct_social_media_data(this_crisis)
+    tw_payload = "A Crisis is happening at time: {}!\n".format(fb_payload['postTime'])
+    tw_payload += "For your safety. Shelter Information: " + fb_payload['shelterURL']
+    tw_payload += "\nFor Crisis detail information: " + fb_payload['deansURL']
+
+    print("payload: ", tw_payload)
+    print("payload: ", fb_payload)
+    print("Before sending")
+    response = requests.post("http://notification:8000/socialmessages/",
+                  json={"message": {"twitterShare":tw_payload, "facebookShare":fb_payload}},
+                  headers={
+                      'content-type': "application/json",
+                  }
+                  )
+    print("Sent request")
+    logger.info(response.status_code)
+    logger.info('Have published to Facebook and Twitter.')
+
+    # Dispatch
+    if this_crisis.crisis_status == "DP":
         try:
             if sender.dispatch_trigger:
-                this_crisis = Crisis.objects.get()
                 phone_number_to_notify = json.loads(this_crisis.phone_number_to_notify)
                 # start creating message
                 reported_time = str(this_crisis.crisis_time)
