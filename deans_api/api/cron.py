@@ -23,7 +23,6 @@ logger = logging.getLogger("django")
 
 email_template = get_template('president_email.html')
 
-
 def construct_report_data():
     payload = {}
     # d = Context({ 'username': username })
