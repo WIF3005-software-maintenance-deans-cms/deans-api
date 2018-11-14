@@ -75,6 +75,38 @@ def construct_social_media_data(this_crisis):
     }
     )
 
+    reported_time = str(this_crisis.crisis_time)
+    name = this_crisis.your_name
+    mobile_number = this_crisis.mobile_number
+    location1 = this_crisis.crisis_location1
+    location2 = this_crisis.crisis_location2
+    # create crisis type
+    crisis_type_queryset = this_crisis.crisis_type.all()
+    crisis_type = []
+    for _ in crisis_type_queryset:
+        crisis_type.append(str(_))
+    crisis_type = ", ".join(crisis_type)
+    # create assistance type
+    assistance_type_queryset = this_crisis.crisis_assistance.all()
+    assistance_type = []
+    for _ in assistance_type_queryset:
+        assistance_type.append(str(_))
+    assistance_type = ", ".join(assistance_type)
+    # handle the rest
+    crisis_description = this_crisis.crisis_description
+    assistance_description = this_crisis.crisis_assistance_description
+
+    message = "\nWe have received the following crisis report, need your immediate attention:\n\n"
+    message += "Reported Time: " + reported_time + "\n"
+    message += "Location: " + location1 + "\n"
+    message += "Location2: " + location2 + "\n"
+    message += "Crisis Type: " + crisis_type + "\n"
+    message += "Crisis Description: " + crisis_description + "\n"
+    message += "Requested Assistance: " + assistance_type + "\n"
+    message += "Assistance Description: " + assistance_description + "\n"
+
+    payload['text'] = message
+
     for i in recent_resolved_crisis:
         payload['recent_resolved_crisis'].append(
             {
