@@ -183,19 +183,19 @@ def trigger(sender, instance, created, **kwargs):
         except Exception as e:
             print("It is ok.", e)
 
-        try:
-            # send to redis
-            queryset = Crisis.objects.all()
-            from ..serializer import CrisisSerializer # this is bad !
-            serializer = CrisisSerializer(queryset, many=True)
-            response = Response(serializer.data) # response is an array of crises
-            channel_layer = channels.layers.get_channel_layer()
-            async_to_sync(channel_layer.group_send)("crises", {
-                "type": "crises_update",
-                "payload": json.dumps(list(response.data))
-            })
-        except Exception as e:
-            print("It is not ok. Human lives at risk!", e)
+    try:
+        # send to redis
+        queryset = Crisis.objects.all()
+        from ..serializer import CrisisSerializer # this is bad !
+        serializer = CrisisSerializer(queryset, many=True)
+        response = Response(serializer.data) # response is an array of crises
+        channel_layer = channels.layers.get_channel_layer()
+        async_to_sync(channel_layer.group_send)("crises", {
+            "type": "crises_update",
+            "payload": json.dumps(list(response.data))
+        })
+    except Exception as e:
+        print("It is not ok. Human lives at risk!", e)
 
 signals.post_save.connect(receiver=trigger, sender=Crisis)
 
