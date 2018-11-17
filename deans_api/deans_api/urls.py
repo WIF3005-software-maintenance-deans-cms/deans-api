@@ -18,6 +18,8 @@ from django.urls import path
 from django.conf.urls import url, include
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
+from rest_framework.documentation import include_docs_urls
+
 
 
 # Serializers define the API representation.
@@ -39,7 +41,9 @@ router.register(r'users', UserViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-	path('api/admin/', admin.site.urls),
+    url(r'^api/admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^api/admin/docs/', include_docs_urls(title='CoreAPI System')),
+    path('api/admin/', admin.site.urls),
     # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/', include('api.urls')),
 ]

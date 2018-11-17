@@ -40,12 +40,16 @@ from rest_framework.permissions import (
 '''
 
 class CrisisViewSet(viewsets.ModelViewSet):
+    """
+        Return a list of all the existing crisis.
+    """
     queryset = Crisis.objects.all()
+    serializer_class = CrisisSerializer
+    # def get_serializer_class(self):
+    #     if self.request.user.is_staff:
+    #         return CrisisSerializer
+    #     return CrisisBasicSerializer
 
-    def get_serializer_class(self):
-        if self.request.user.is_staff:
-            return CrisisSerializer
-        return CrisisBasicSerializer
 
     def get_permissions(self):
         """
@@ -126,10 +130,10 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
-    def get_serializer_class(self):
-        if self.request.user.is_staff:
-            return UserAdminSerializer
-        return UserSerializer
+    # def get_serializer_class(self):
+    #     if self.request.user.is_staff:
+    #         return UserAdminSerializer
+    #     return UserSerializer
 
     def get_permissions(self):
         """
