@@ -3,6 +3,11 @@ from .CrisisType import CrisisType
 from .CrisisAssistance import CrisisAssistance
 #from .EmergencyAgencies import EmergencyAgencies
 #from .SocialMediaAccount import SocialMediaAccount
+
+'''
+    SiteSetting model implements the design pattern of singleton.
+    only one unique instance of the model will be created, loaded and deleted in the database.
+'''
 class SingletonModel(models.Model):
 
     class Meta:
@@ -19,6 +24,10 @@ class SingletonModel(models.Model):
     def load(cls):
         obj, created = cls.objects.get_or_create(pk=1)
         return obj
+
+'''
+    facebook & twitter information together with the summary_report_email will be in the settings.
+'''
 
 class SiteSettings(SingletonModel):
     #setting_type = models.ForeignKey('CrisisType',default = None, on_delete=models.CASCADE)

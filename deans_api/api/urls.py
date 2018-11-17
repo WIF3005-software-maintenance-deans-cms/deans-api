@@ -15,7 +15,20 @@ from .views import (
     EmergencyAgenciesPartialUpdateView,
     SiteSettingViewSet
 )
-
+'''
+    The Url Router here has dispatched all views in views.py to corresponding url.
+    Api urls:
+        /crises/
+        /crises/update/pk
+        /crises/update-partial/pk
+        /crisisassistance/
+        /crisistype/
+        /users/
+        /users/
+        /emergencyagencies/
+        /emergencyagencies/update-partial/pk
+        /sitesettings/
+'''
 router = routers.DefaultRouter()
 router.register(r'^crises', CrisisViewSet)
 router.register(r'^crisisassistance', CrisisAssistanceViewSet)

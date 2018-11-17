@@ -18,7 +18,24 @@ STATUS_CHOICES = (
     ('DP', 'Dispatched'),
     ('RS', 'Resolved'),
 )
-
+'''
+    This is the most important model of the whole CMS System. The Crisis Model consists of all the information that a crisis needs.
+    Details:
+        reporter's name,  String
+        reporter's mobile_number, String
+        crisis_id, String
+        crisis_type, Many to many field linked to CrisisType Model
+        crisis_description, longer String, Text Field
+        crisis_assistance, Many to many field linked to CrisisAssistance Model
+        crisis_assistance_description, longer string, Text Field
+        crisis_time, a date time field
+        crisis_location1&2, longer String, Text field
+        updated_at, a date time field records last object modification
+        owner, a Many to many field linked to User Model
+        visible, a boolean field recording the visibility of a crisis in the front end
+        dispatch_trigger, a boolean field recording the signal of a dispatch action
+        crisis status, a tuple recording the crisis status
+'''
 class Crisis(models.Model):
     your_name = models.CharField(default=None,max_length=255)
     mobile_number = models.CharField(default=None,max_length=255)
@@ -35,7 +52,6 @@ class Crisis(models.Model):
     visible = models.BooleanField(default=True)
     phone_number_to_notify = models.CharField(default="",max_length=255)
     dispatch_trigger = models.BooleanField(default=False)
-    # TODO: support visible in backend
 
     crisis_status = models.CharField(choices=STATUS_CHOICES, default='PD',  max_length=254)
 
@@ -44,6 +60,10 @@ class Crisis(models.Model):
 
     class Meta:
         ordering = ['-crisis_id']
+
+'''
+    social media announcement generator
+'''
 
 def construct_social_media_data(this_crisis):
     payload = {}
@@ -137,7 +157,12 @@ def construct_social_media_data(this_crisis):
         )
     return payload
 
-
+'''
+    notification subsystem - social media api caller trigger + dispatch action trigger
+    when crisis model is saved, this trigger function is called.
+    Social media api will be called to send announcement.
+    dispatch function will only be called when there is a dispatch signal.
+'''
 def trigger(sender, instance, created, **kwargs):
 
     #Social media Trigger
@@ -152,6 +177,7 @@ def trigger(sender, instance, created, **kwargs):
     print("payload: ", tw_payload)
     print("payload: ", fb_payload)
     print("Before sending")
+    # Post to the notification system api, to send facebook and twitter announcement
     response = requests.post("http://notification:8000/socialmessages/",
                   json={"message": {"twitterShare":tw_payload, "facebookShare":fb_payload}},
                   headers={
@@ -215,10 +241,14 @@ def trigger(sender, instance, created, **kwargs):
         except Exception as e:
             print("It is ok.", e)
 
+    '''
+        Crisis Info, WebSocket cache service
+    '''
+
     try:
         # send to redis
         queryset = Crisis.objects.all()
-        from ..serializer import CrisisSerializer # this is bad !
+        from ..serializer import CrisisSerializer
         serializer = CrisisSerializer(queryset, many=True)
         response = Response(serializer.data) # response is an array of crises
         channel_layer = channels.layers.get_channel_layer()

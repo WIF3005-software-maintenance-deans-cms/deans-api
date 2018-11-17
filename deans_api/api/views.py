@@ -28,6 +28,17 @@ from rest_framework.permissions import (
 # import channels.layers
 # from asgiref.sync import async_to_sync
 
+'''
+    The View Classes here implements the V-view in the MVC architecture.
+    CrisisView, CrisisUpdateView, CrisisPartialUpdateView, 
+    CrisisAssistanceView, CrisisTypeView, 
+    UserView, UserPartialUpdateView,
+    SiteSettingView,
+    EmergencyView, EmergencyPartialUpdateView
+    
+    will all be handled by an api url in urls.py
+'''
+
 class CrisisViewSet(viewsets.ModelViewSet):
     queryset = Crisis.objects.all()
 

@@ -10,6 +10,9 @@ from django.utils.timezone import now
 from .models.Crisis import STATUS_CHOICES
 from django.contrib.auth.models import User
 
+'''This file contains all the serializers the api is using.
+    Each model will be serialized in a way that can be processed and inside a json format.
+'''
 
 class CrisisAssistanceSerializer(serializers.ModelSerializer):
     class Meta:
