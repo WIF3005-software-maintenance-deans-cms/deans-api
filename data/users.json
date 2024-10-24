@@ -3,7 +3,7 @@
     "model": "auth.user",
     "pk": 1,
     "fields": {
-        "password": "pbkdf2_sha256$120000$PZPujcpbpAA9$fd0+gD4QBL/pioJ2WDjhBaWjAPbYzHigL+bf38+YbAk=",
+        "password": "pbkdf2_sha256$120000$vMBpasJiZc1s$kzwNYkp4ew2MYUbVoRfvwG+E9HFWj8G2bv3FH/m18Vg=",
         "last_login": "2018-10-24T06:41:45.252Z",
         "is_superuser": true,
         "username": "admin",
@@ -21,7 +21,7 @@
     "model": "auth.user",
     "pk": 2,
     "fields": {
-        "password": "pbkdf2_sha256$120000$t1u1yfi9F9F0$vbQU9+9ng/wm1Cml0YtbuaLvpZGRr4cBBFi+ngObpP8=",
+        "password": "pbkdf2_sha256$120000$vMBpasJiZc1s$kzwNYkp4ew2MYUbVoRfvwG+E9HFWj8G2bv3FH/m18Vg=",
         "last_login": null,
         "is_superuser": false,
         "username": "operator",
