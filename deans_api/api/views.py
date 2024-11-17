@@ -39,32 +39,30 @@ from rest_framework.permissions import (
     will all be handled by an api url in urls.py
 '''
 
-class CrisisViewSet(viewsets.ModelViewSet):
+class PermissionByActionMixin:
+    def get_permissions(self):
+        permission_classes = {
+            'list': [AllowAny],
+            'retrieve': [AllowAny],
+            'create': [AllowAny],
+            'update': [IsAdminUser],
+            'partial_update': [IsAdminUser],
+            'destroy': [IsAdminUser],
+        }
+        action_permissions = permission_classes.get(self.action, [IsAdminUser])
+        return [permission() for permission in action_permissions]
+
+class CrisisViewSet(PermissionByActionMixin,viewsets.ModelViewSet):
     """
         Return a list of all the existing crisis.
     """
     queryset = Crisis.objects.all()
     serializer_class = CrisisSerializer
-    # def get_serializer_class(self):
-    #     if self.request.user.is_staff:
-    #         return CrisisSerializer
-    #     return CrisisBasicSerializer
 
-
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action == 'list':
-            permission_classes = [AllowAny]
-        elif self.action == 'retrieve':
-            permission_classes = [AllowAny]
-        elif self.action == 'create':
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAdminUser]
-
-        return [permission() for permission in permission_classes]
+    def get_serializer_class(self):
+        if self.request.user.is_staff:
+            return CrisisSerializer
+        return CrisisBasicSerializer
 
 class CrisisUpdateView(generics.GenericAPIView, mixins.UpdateModelMixin):
     '''
@@ -87,43 +85,16 @@ class CrisisPartialUpdateView(generics.GenericAPIView, mixins.UpdateModelMixin):
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
-class CrisisAssistanceViewSet(viewsets.ModelViewSet):
+class CrisisAssistanceViewSet(PermissionByActionMixin,viewsets.ModelViewSet):
     queryset = CrisisAssistance.objects.all()
     serializer_class = CrisisAssistanceSerializer
 
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action == 'list':
-            permission_classes = [AllowAny]
-        elif self.action == 'retrieve':
-            permission_classes = [AllowAny]
-        elif self.action == 'create':
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
-
-class CrisisTypeViewSet(viewsets.ModelViewSet):
+    
+class CrisisTypeViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
     queryset = CrisisType.objects.all()
     serializer_class = CrisisTypeSerializer
 
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action == 'list':
-            permission_classes = [AllowAny]
-        elif self.action == 'retrieve':
-            permission_classes = [AllowAny]
-        elif self.action == 'create':
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
-
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
     """
     A viewset for viewing and editing user instances.
     """
@@ -134,18 +105,6 @@ class UserViewSet(viewsets.ModelViewSet):
     #     if self.request.user.is_staff:
     #         return UserAdminSerializer
     #     return UserSerializer
-
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action == 'list':
-            permission_classes = [IsAdminUser] 
-        elif self.action == 'create':
-            permission_classes = [IsAdminUser]
-        else:
-            permission_classes = [NotAllowed]
-        return [permission() for permission in permission_classes]
 
 class UserPartialUpdateView(generics.GenericAPIView, mixins.UpdateModelMixin):
     '''
@@ -158,44 +117,17 @@ class UserPartialUpdateView(generics.GenericAPIView, mixins.UpdateModelMixin):
     def put(self, request, *args, **kwargs):
         return self.partial_update(request, *args, **kwargs)
 
-class SiteSettingViewSet(viewsets.ModelViewSet):
+class SiteSettingViewSet(PermissionByActionMixin, viewsets.ModelViewSet):
 
     serializer_class = SiteSettingsSerializer
     queryset = SiteSettings.objects.all()
 
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action == 'list':
-            permission_classes = [AllowAny]
-        elif self.action == 'retrieve':
-            permission_classes = [AllowAny]
-        elif self.action == 'create':
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
 
-
-class EmergencyAgenciesView(viewsets.ModelViewSet):
+class EmergencyAgenciesView(PermissionByActionMixin, viewsets.ModelViewSet):
 
     serializer_class = EmergencyAgenciesSerializer
     queryset = EmergencyAgencies.objects.all()
 
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action == 'list':
-            permission_classes = [AllowAny]
-        elif self.action == 'retrieve':
-            permission_classes = [AllowAny]
-        elif self.action == 'create':
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAdminUser]
-        return [permission() for permission in permission_classes]
 
 class EmergencyAgenciesPartialUpdateView(generics.GenericAPIView, mixins.UpdateModelMixin):
 

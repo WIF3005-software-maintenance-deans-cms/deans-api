@@ -11,6 +11,8 @@ from asgiref.sync import async_to_sync
 from rest_framework.response import Response # this is bad!
 import json
 import logging
+from django.db.models import JSONField
+from ..serializer import CrisisSerializer
 logger = logging.getLogger("django")
 
 STATUS_CHOICES = (
@@ -178,12 +180,11 @@ def trigger(sender, instance, created, **kwargs):
     print("payload: ", fb_payload)
     print("Before sending")
     # Post to the notification system api, to send facebook and twitter announcement
-    response = requests.post("http://notification:8000/socialmessages/",
-                  json={"message": {"twitterShare":tw_payload, "facebookShare":fb_payload}},
-                  headers={
-                      'content-type': "application/json",
-                  }
-                  )
+    response = requests.post(
+                    "http://notification:8000/socialmessages/",
+                    json=payload,
+                    timeout=10  # 10 seconds timeout
+                )
     print("Sent request")
     logger.info(response.status_code)
     logger.info('Have published to Facebook and Twitter.')
@@ -192,7 +193,7 @@ def trigger(sender, instance, created, **kwargs):
     if this_crisis.crisis_status == "DP":
         try:
             if sender.dispatch_trigger:
-                phone_number_to_notify = json.loads(this_crisis.phone_number_to_notify)
+                phone_number_to_notify = JSONField(default=list)
                 # start creating message
                 reported_time = str(this_crisis.crisis_time)
                 name = this_crisis.your_name
@@ -250,7 +251,7 @@ def trigger(sender, instance, created, **kwargs):
         queryset = Crisis.objects.all()
         from ..serializer import CrisisSerializer
         serializer = CrisisSerializer(queryset, many=True)
-        response = Response(serializer.data) # response is an array of crises
+        serialized_data = serializer.data
         channel_layer = channels.layers.get_channel_layer()
         async_to_sync(channel_layer.group_send)("crises", {
             "type": "crises_update",
