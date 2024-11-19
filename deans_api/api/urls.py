@@ -14,13 +14,13 @@ from .views import (
 )
 
 # Define the router for ViewSets
-router = DefaultRouter()
-router.register(r'crises', CrisisViewSet)
-router.register(r'crisisassistance', CrisisAssistanceViewSet)
-router.register(r'crisistype', CrisisTypeViewSet)
-router.register(r'users', UserViewSet)
-router.register(r'emergencyagencies', EmergencyAgenciesView)
-router.register(r'sitesettings', SiteSettingViewSet)
+router = routers.DefaultRouter()
+router.register(r'^crises', CrisisViewSet)
+router.register(r'^crisisassistance', CrisisAssistanceViewSet)
+router.register(r'^crisistype', CrisisTypeViewSet)
+router.register(r'^users', UserViewSet)
+router.register(r'^emergencyagencies', EmergencyAgenciesView)
+router.register(r'^sitesettings', SiteSettingViewSet)
 
 # Define urlpatterns
 urlpatterns = [
