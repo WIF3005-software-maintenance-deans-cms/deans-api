@@ -25,6 +25,11 @@ class CrisisTypeSerializer(serializers.ModelSerializer):
         fields = ('id','name',)
 
 class CrisisSerializer(serializers.ModelSerializer):
+    
+    """
+    Serializer for handling the detailed representation of Crisis instances.
+    """
+
     crisis_type = serializers.PrimaryKeyRelatedField(many=True, queryset=CrisisType.objects.all())
     crisis_assistance = serializers.PrimaryKeyRelatedField(many=True, queryset=CrisisAssistance.objects.all())
     class Meta:
@@ -64,16 +69,6 @@ class CrisisBasicSerializer(serializers.ModelSerializer):
                 )
 
 class CrisisUpdateSerializer(serializers.ModelSerializer):
-    # content = serializers.CharField(required=True)
-    # thread = serializers.HyperlinkedRelatedField(
-    #     read_only=True,
-    #     view_name='thread-detail'
-    # )
-    # creator = serializers.HyperlinkedRelatedField(
-    #     read_only=True,
-    #     view_name='user-detail',
-    #     lookup_field='username'
-    # )
     class Meta:
         model = Crisis
         fields = (
@@ -89,15 +84,12 @@ class CrisisUpdateSerializer(serializers.ModelSerializer):
         )
 
     def update(self, instance, validated_data):
-        # Update fields if there is any change
         for field, value in validated_data.items():
             setattr(instance, field, value)
-        # Update 'updated_at' field to now
-        setattr(instance, 'updated_at', now())
-
-        # Note: If user update post, it won't change the last_activity
+        instance.updated_at = now()
         instance.save()
         return instance
+
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
